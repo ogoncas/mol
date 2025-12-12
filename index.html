@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação da Linguagem MOL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        pre {
+            background: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #3498db;
+        }
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .example {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #777;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Documentação da Linguagem MOL</h1>
+<p><strong>MOL</strong> — <em>Modular Ordered Layers</em> — é uma linguagem de programação simples, baseada em pilha (stack-based), projetada para ser compacta, fácil de implementar e extensível. Possui um compilador (<code>molc</code>) que gera bytecode e uma máquina virtual (<code>molvm</code>) que executa esse bytecode.</p>
+
+<h2>Visão Geral</h2>
+<ul>
+    <li><strong>Paradigma:</strong> Baseado em pilha (semelhante a Forth ou PostScript)</li>
+    <li><strong>Tipos de dados:</strong> Inteiro (<code>int</code>), Ponto flutuante (<code>float</code>), String</li>
+    <li><strong>Variáveis:</strong> 26 variáveis globais nomeadas de A a Z</li>
+    <li><strong>Controle de fluxo:</strong> Saltos incondicionais (<code>JMP</code>) e condicionais (<code>JZ</code>)</li>
+    <li><strong>Extensão dos arquivos:</strong>
+        <ul>
+            <li><code>.mol</code> – código-fonte</li>
+            <li><code>.mb</code> – bytecode compilado</li>
+        </ul>
+    </li>
+</ul>
+
+<h2>Como Usar</h2>
+<ol>
+    <li>Escreva o programa em um arquivo <code>exemplo.mol</code></li>
+    <li>Compile com: <pre>molc exemplo.mol exemplo.mb</pre></li>
+    <li>Execute com: <pre>molvm exemplo.mb</pre></li>
+</ol>
+
+<h2>Tipos de Dados</h2>
+<table>
+    <tr><th>Tipo</th><th>Descrição</th><th>Exemplo literal</th></tr>
+    <tr><td>Inteiro</td><td>Número inteiro de 32 bits</td><td><code>42</code>, <code>-7</code></td></tr>
+    <tr><td>Float</td><td>Número de ponto flutuante (single precision)</td><td><code>3.14</code>, <code>-0.5</code></td></tr>
+    <tr><td>String</td><td>Sequência de caracteres (máx. 255 caracteres)</td><td><code>"Olá mundo"</code></td></tr>
+</table>
+
+<h2>Instruções (Opcodes)</h2>
+
+<h3>Operações com a Pilha</h3>
+<table>
+    <tr><th>Instrução</th><th>Descrição</th><th>Efeito na pilha</th></tr>
+    <tr><td><code>PUSH valor</code></td><td>Empilha um valor literal</td><td>... → ... valor</td></tr>
+    <tr><td><code>DUP</code></td><td>Duplica o topo da pilha</td><td>... a → ... a a</td></tr>
+    <tr><td><code>SWAP</code></td><td>Troca os dois itens do topo</td><td>... a b → ... b a</td></tr>
+    <tr><td><code>POP</code></td><td>Desempilha e descarta o topo</td><td>... a → ...</td></tr>
+</table>
+
+<h3>Operações Aritméticas</h3>
+<p>Operam sobre dois valores do mesmo tipo (int ou float). Consomem dois valores e empilham o resultado.</p>
+<table>
+    <tr><th>Instrução</th><th>Operação</th></tr>
+    <tr><td><code>ADD</code></td><td>Adição</td></tr>
+    <tr><td><code>SUB</code></td><td>Subtração</td></tr>
+    <tr><td><code>MUL</code></td><td>Multiplicação</td></tr>
+    <tr><td><code>DIV</code></td><td>Divisão (erro se divisor = 0)</td></tr>
+</table>
+
+<h3>Operações com Strings</h3>
+<table>
+    <tr><th>Instrução</th><th>Descrição</th><th>Efeito na pilha</th></tr>
+    <tr><td><code>CONCAT</code></td><td>Concatena duas strings</td><td>... s1 s2 → ... (s1+s2)</td></tr>
+    <tr><td><code>STRLEN</code></td><td>Retorna o comprimento da string</td><td>... s → ... len</td></tr>
+</table>
+
+<h3>Entrada/Saída</h3>
+<table>
+    <tr><th>Instrução</th><th>Descrição</th><th>Efeito na pilha</th></tr>
+    <tr><td><code>PRINT</code></td><td>Imprime valor com nova linha</td><td>... v → ...</td></tr>
+    <tr><td><code>PRINTC</code></td><td>Imprime valor sem nova linha</td><td>... v → ...</td></tr>
+    <tr><td><code>INPUT</code></td><td>Lê entrada do usuário (detecta tipo automaticamente)</td><td>... → ... valor</td></tr>
+</table>
+
+<h3>Variáveis</h3>
+<p>26 variáveis globais: <code>A</code> a <code>Z</code></p>
+<table>
+    <tr><th>Instrução</th><th>Descrição</th><th>Exemplo</th></tr>
+    <tr><td><code>SET X</code></td><td>Armazena o topo da pilha na variável X</td><td><code>SET A</code></td></tr>
+    <tr><td><code>GET X</code></td><td>Empilha o valor da variável X</td><td><code>GET A</code></td></tr>
+</table>
+
+<h3>Comparações</h3>
+<p>Comparam dois valores do mesmo tipo e retornam 1 (verdadeiro) ou 0 (falso) como inteiro.</p>
+<table>
+    <tr><th>Instrução</th><th>Comparação</th></tr>
+    <tr><td><code>EQ</code></td><td>Igual (==)</td></tr>
+    <tr><td><code>GT</code></td><td>Maior que (>)</td></tr>
+    <tr><td><code>LT</code></td><td>Menor que (&lt;)</td></tr>
+</table>
+
+<h3>Conversão</h3>
+<table>
+    <tr><th>Instrução</th><th>Descrição</th></tr>
+    <tr><td><code>TOSTRING</code></td><td>Converte int ou float para string</td></tr>
+</table>
+
+<h3>Controle de Fluxo</h3>
+<table>
+    <tr><th>Instrução</th><th>Descrição</th></tr>
+    <tr><td><code>JMP label</code></td><td>Salto incondicional para label</td></tr>
+    <tr><td><code>JZ label</code></td><td>Salto condicional: pula se o topo da pilha for zero (0 ou 0.0)</td></tr>
+    <tr><td><code>HALT</code></td><td>Termina a execução do programa</td></tr>
+</table>
+<p>Labels são definidas com <code>nome:</code> no início da linha.</p>
+
+<h2>Exemplos</h2>
+
+<div class="example">
+<h3>Olá Mundo</h3>
+<pre>
+PUSH "Olá, mundo!"
+PRINT
+HALT
+</pre>
+</div>
+
+<div class="example">
+<h3>Soma de dois números com entrada</h3>
+<pre>
+INPUT          ; lê primeiro número
+SET A
+INPUT          ; lê segundo número
+GET A
+ADD
+PRINT
+HALT
+</pre>
+</div>
+
+<div class="example">
+<h3>Loop contador de 1 a 10</h3>
+<pre>
+PUSH 1
+SET A          ; A = 1
+
+LOOP:
+GET A
+DUP
+PRINT
+PUSH 1
+ADD
+DUP
+SET A
+PUSH 10
+GT
+JZ LOOP        ; se A <= 10, volta para LOOP
+
+POP            ; descarta o 11 da pilha
+HALT
+</pre>
+</div>
+
+<div class="example">
+<h3>Concatenação e comprimento de string</h3>
+<pre>
+PUSH "Olá"
+PUSH " mundo!"
+CONCAT
+DUP
+PRINT          ; imprime "Olá mundo!"
+STRLEN
+PRINT          ; imprime 11
+HALT
+</pre>
+</div>
+
+<h2>Limitações Conhecidas</h2>
+<ul>
+    <li>Strings limitadas a 255 caracteres</li>
+    <li>Apenas 26 variáveis globais (A–Z)</li>
+    <li>Sem funções ou escopo local</li>
+    <li>Sem operadores lógicos (AND, OR) diretos</li>
+    <li>Controle de fluxo básico (apenas JMP e JZ)</li>
+    <li>Comentários (; ou #)</li>
+</ul>
+
+<footer>
+    Documentação da Linguagem MOL – Dezembro 2025
+</footer>
+
+</body>
+</html>
